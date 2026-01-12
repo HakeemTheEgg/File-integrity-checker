@@ -31,13 +31,29 @@ def hash_directory(path, algorithm="sha256",skip_hidden=True):#function to hash 
         print(f"Permission denied: {path}")
         return results
     
+def simple_printer(results):#function to print the results in a simple format
+    for filename, filehash in results.items():
+        print(f"{filename}: {filehash}")
 
+def print_json(results, output_file):#function to print the results in JSON format
+    try:
+        with open(output_file, 'w') as f:
+            json.dump(results, f, indent=4)
+    except Exception as e:
+        print(f"Error writing JSON file: {e}")
+
+def general_printer(args, results):#function to choose the output format
+    if args.output == 'json':
+        print_json(results, args.output_file)
+    elif args.output == 'simple':
+        simple_printer(results)
 
 if __name__ == "__main__": #entry point to verify that the script is being run directly
         parser = argparse.ArgumentParser(description="Compute the hash of a file.")
         parser.add_argument("file", type=str, help="Path to the file to hash")
         parser.add_argument("-a", type=str, default="sha256", help="Algorithm to use")
-        parser.add_argument()
+        parser.add_argument("--output", choices=["json", "simple"], default="simple", help="Output in JSON format")
+        parser.add_argument("--output_file", type=str, default="hashes.json", help="Output file for JSON format")
         
         args = parser.parse_args()
         result = compute_hash(args.file, args.a if args.a else "sha256")#calls the compute_hash function, generates and stores the hash
@@ -48,8 +64,5 @@ if __name__ == "__main__": #entry point to verify that the script is being run d
 
 
 
-    
 
-
-def print_json(results):#function to print the results in JSON format
     
