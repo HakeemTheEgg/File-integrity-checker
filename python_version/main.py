@@ -1,6 +1,7 @@
 import argparse
 import hashlib, json
 from os import scandir
+import os
 
 def compute_hash(file_path, algorithm="sha256"):
     hash_obj = hashlib.new(algorithm)
@@ -56,9 +57,14 @@ if __name__ == "__main__": #entry point to verify that the script is being run d
         parser.add_argument("--output_file", type=str, default="hashes.json", help="Output file for JSON format")
         
         args = parser.parse_args()
-        result = compute_hash(args.file, args.a if args.a else "sha256")#calls the compute_hash function, generates and stores the hash
-        if result:
-            print(f"The hash for {args.file.upper()} is: {result}")
+        
+        if os.path.isdir(args.file):
+            results = hash_directory(args.file, args.a)
+        elif os.path.isfile(args.file):
+            file_hash = compute_hash(args.file, args.a)
+            results = {os.path.basename(args.file): file_hash}
+        
+        general_printer(args, results)
 
 
 
