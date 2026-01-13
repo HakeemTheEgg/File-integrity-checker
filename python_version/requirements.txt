@@ -1,0 +1,4 @@
+python version >= 3.8
+all standard libraries 
+no external libraries 
+no external dependenies (at this point)
