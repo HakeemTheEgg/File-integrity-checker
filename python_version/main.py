@@ -25,6 +25,9 @@ def hash_directory(path, algorithm="sha256",skip_hidden=True):#function to hash 
                 continue
             if entry.is_file():
                 results[entry.name]= compute_hash(entry.path, algorithm)
+                if not results:
+                    results[entry.name]= "File could not be processed"
+                
             elif entry.is_dir():
                 results.update(hash_directory(entry.path, algorithm))#recursiion fur subdirectories
         return results
@@ -60,6 +63,9 @@ if __name__ == "__main__": #entry point to verify that the script is being run d
         
         if os.path.isdir(args.file):
             results = hash_directory(args.file, args.a)
+            if not results:
+                print("no files processed")
+                
         elif os.path.isfile(args.file):
             file_hash = compute_hash(args.file, args.a)
             results = {os.path.basename(args.file): file_hash}
