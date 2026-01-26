@@ -12,8 +12,10 @@ fn main() {
 
 
 //definitions
-fn compute_file_hash(file_path: &str) -> Error<String, f64>{
-let mut file: &str = file_path;
+fn compute_file_hash(file_path: &str) -> Error<String, f64>{//function to compute file hash
+
+    let mut file = std::fs::File::open(file_path)
+        .map_err(|e| format!("Failed to open file: {}", e))?;//opens file or returns error
 
 }
 // i have nothing to add but i want to test git changes
